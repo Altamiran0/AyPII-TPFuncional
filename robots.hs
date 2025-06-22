@@ -5,8 +5,15 @@ data Robot = Robot {
         programas :: [Programa]
     }
 
---3
 type Programa = Robot -> Robot
+
+instance Show Robot where
+    show :: Robot -> String
+    show ( Robot nombre nivelExperiencia energia programas ) =
+        "Robot { nombre = " ++ show nombre ++ ", nivelExperiencia = " ++ show nivelExperiencia ++ ", energia = " ++ show energia ++ ", #programas = " ++ show ( length programas ) ++ " }"
+
+--3
+type Academia = [ Robot ]
 
 hayRobotSinProgramas :: String -> Academia -> Bool
 hayRobotSinProgramas nombreRobot = any(\robot -> nombre robot == nombreRobot && null(programas robot))
@@ -16,11 +23,6 @@ esObstinado robot = length(programas robot) > 3 * nivelExperiencia robot
 
 hayRobotsObstinados :: Academia -> Bool
 hayRobotsObstinados = all esObstinado . filter((>16).nivelExperiencia)
-
-
-instance Show Robot where
-    show ( Robot nombre nivelExperiencia energia programas ) =
-        "Robot { nombre = " ++ show nombre ++ ", nivelExperiencia = " ++ show nivelExperiencia ++ ", energia = " ++ show energia ++ ", #programas = " ++ show ( length programas ) ++ " }"
 
 -- 4. 
 f x [y] = y
@@ -36,6 +38,7 @@ f x (y1:y2:ys)
 --          Si es el segundo robot el que tiene mas energia entonces hago tambien creo y reevaluo la nueva lista, pero ahora con el segundo robot como "head".
 
 -- 4a - Version mas expresiva:
+seleccionarMayor :: Ord a1 => (a2 -> a1) -> [a2] -> a2
 seleccionarMayor _ [ elem ] = elem
 seleccionarMayor criterio ( fst : snd : resto )
          | criterio fst >= criterio snd = seleccionarMayor criterio ( fst : resto )
@@ -43,11 +46,11 @@ seleccionarMayor criterio ( fst : snd : resto )
 
 -- 4b.1 - mejorProgramaContra:
 mejorProgramaContra :: Robot -> Robot -> Programa
-mejorPrograma victima atacante = seleccionarMayor (\ programa -> ( energia victima ) - energia ( programa victima )) ( programas atacante )
+mejorProgramaContra victima atacante = seleccionarMayor (\ programa -> energia victima - energia ( programa victima )) ( programas atacante )
 
 -- 4b.2 - mejorOponente:
-mejorOponente :: Robot -> Academia -> Robot
-mejorOponente robot robots = seleccionarMayor (\ oponente -> ( poder oponente ) - ( poder robot )) robots
+-- mejorOponente :: Robot -> Academia -> Robot
+-- mejorOponente robot = seleccionarMayor (\ oponente -> poder oponente - poder robot )
 
 --5
 noPuedeDerrotarle :: Robot -> Robot -> Bool
