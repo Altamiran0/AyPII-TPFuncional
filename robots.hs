@@ -48,3 +48,8 @@ mejorPrograma victima atacante = seleccionarMayor (\ programa -> ( energia victi
 -- 4b.2 - mejorOponente:
 mejorOponente :: Robot -> Academia -> Robot
 mejorOponente robot robots = seleccionarMayor (\ oponente -> ( poder oponente ) - ( poder robot )) robots
+
+--5
+noPuedeDerrotarle :: Robot -> Robot -> Bool
+noPuedeDerrotarle atacante victima = energia victima == energia (foldl atacarAVictima victima (programas atacante))
+    where atacarAVictima victima programa = programa victima
