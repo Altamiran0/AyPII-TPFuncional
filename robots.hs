@@ -107,8 +107,8 @@ mejorProgramaContra :: Robot -> Robot -> Programa
 mejorProgramaContra victima atacante = seleccionarMayor (\ programa -> energia victima - energia ( programa victima )) ( programas atacante )
 
 -- 4b.2 - mejorOponente:
--- mejorOponente :: Robot -> Academia -> Robot
--- mejorOponente robot = seleccionarMayor (\ oponente -> poder oponente - poder robot )
+mejorOponente :: Robot -> Academia -> Robot
+mejorOponente robot = seleccionarMayor ( diferenciaDePoder robot )
 
 --5
 noPuedeDerrotarle :: Robot -> Robot -> Bool
