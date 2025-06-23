@@ -70,7 +70,7 @@ robertito = Robot {
 }
 
 type Academia = [ Robot ]
-academia :: [Robot]
+academia :: Academia
 academia = [ atlas, titan, robertito ]
 
 hayRobotSinProgramas :: String -> Academia -> Bool
