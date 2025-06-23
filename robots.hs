@@ -37,9 +37,8 @@ poder robot = energia robot + ((nivelExperiencia robot) * (length (programas rob
 
 danio :: Robot -> Programa -> Int
 danio robot programa 
-    | (energia robot) < energia (programa robot) = - ganancia
-    | otherwise = 0
-    where ganancia = energia (programa robot) - (energia robot)
+    | (energia robot) == energia (programa robot) = 0
+    | otherwise = (energia (programa robot) - (energia robot))
 
 diferenciaDePoder :: Robot -> Robot -> Int
 diferenciaDePoder r1 r2 = abs (poder r1 - poder r2)
