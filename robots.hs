@@ -1,3 +1,4 @@
+-- 1
 data Robot = Robot {   
         nombre :: String,
         nivelExperiencia :: Int,
@@ -7,10 +8,41 @@ data Robot = Robot {
 
 type Programa = Robot -> Robot
 
+-- Instancia que permite vizualizar los efectos de las funciones en los robots
 instance Show Robot where
     show :: Robot -> String
     show ( Robot nombre nivelExperiencia energia programas ) =
-        "Robot { nombre = " ++ show nombre ++ ", nivelExperiencia = " ++ show nivelExperiencia ++ ", energia = " ++ show energia ++ ", #programas = " ++ show ( length programas ) ++ " }"
+        "Robot { nombre = " ++ show nombre ++ ", nivelExperiencia = " ++ show nivelExperiencia ++ 
+        ", energia = " ++ show energia ++ ", programas = " ++ show ( length programas ) ++ " }"
+
+recargaBateria :: Int -> Programa
+recargaBateria n robot = robot { energia = energia robot + n }
+
+descargaElectrica :: Programa
+descargaElectrica robot 
+    | energia robot > 10 = robot { energia = (energia robot) - 10}
+    | otherwise = robot { energia = div (energia robot) 2 }
+
+olvidarProgramas :: Int -> Programa
+olvidarProgramas n robot  = robot { programas = drop n (programas robot) }
+
+autoAtaque :: Programa
+autoAtaque robot 
+    | null (programas robot) = robot { nombre = "ERROR", nivelExperiencia = 0, energia = 0, programas = []}
+    | otherwise = (head (programas robot)) robot
+    
+-- 2
+poder :: Robot -> Int
+poder robot = energia robot + ((nivelExperiencia robot) * (length (programas robot)))
+
+danio :: Robot -> Programa -> Int
+danio robot programa 
+    | (energia robot) < energia (programa robot) = - ganancia
+    | otherwise = 0
+    where ganancia = energia (programa robot) - (energia robot)
+
+diferenciaDePoder :: Robot -> Robot -> Int
+diferenciaDePoder r1 r2 = abs (poder r1 - poder r2)
 
 --3
 type Academia = [ Robot ]
