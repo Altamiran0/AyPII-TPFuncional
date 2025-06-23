@@ -83,6 +83,7 @@ hayRobotsObstinados :: Academia -> Bool
 hayRobotsObstinados = all esObstinado . filter((>16).nivelExperiencia)
 
 -- 4. 
+f :: Ord a1 => (a2 -> a1) -> [a2] -> a2
 f x [y] = y
 f x (y1:y2:ys)
       | x y1 >= x y2 = f x (y1:ys)
