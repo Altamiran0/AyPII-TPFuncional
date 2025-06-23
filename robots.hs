@@ -45,7 +45,33 @@ diferenciaDePoder :: Robot -> Robot -> Int
 diferenciaDePoder r1 r2 = abs (poder r1 - poder r2)
 
 --3
+atlas :: Robot
+atlas = Robot {
+    nombre = "Atlas",
+    nivelExperiencia = 100,
+    energia = 1000,
+    programas = []
+}
+
+titan :: Robot
+titan = Robot {
+    nombre = "Titan",
+    nivelExperiencia = 999999,
+    energia = 999999,
+    programas = []
+}
+
+robertito :: Robot
+robertito = Robot {
+    nombre = "Robertito",
+    nivelExperiencia = 9999999,
+    energia = 9999999,
+    programas = []
+}
+
 type Academia = [ Robot ]
+academia :: [Robot]
+academia = [ atlas, titan, robertito ]
 
 hayRobotSinProgramas :: String -> Academia -> Bool
 hayRobotSinProgramas nombreRobot = any(\robot -> nombre robot == nombreRobot && null(programas robot))
