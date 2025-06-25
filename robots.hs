@@ -1,3 +1,4 @@
+module Robots where
 -- 1
 data Robot = Robot {   
         nombre :: String,
@@ -8,12 +9,13 @@ data Robot = Robot {
 
 type Programa = Robot -> Robot
 
--- Instancia que permite vizualizar los efectos de las funciones en los robots
+-- Instancia de "Show" que permite vizualizar un robots.
 instance Show Robot where
-    show :: Robot -> String
-    show ( Robot nombre nivelExperiencia energia programas ) =
-        "Robot { nombre = " ++ show nombre ++ ", nivelExperiencia = " ++ show nivelExperiencia ++ 
-        ", energia = " ++ show energia ++ ", programas = " ++ show ( length programas ) ++ " }"
+    show ( Robot n nExp e p ) = "Robot { nombre = " ++ show n ++ ", nivelExperiencia = " ++ show nExp ++ ", energia = " ++ show e ++ ", programas = " ++ show ( length p ) ++ " }"
+-- Instancia de "Eq" que permite comparar dos robots.
+instance Eq Robot where
+    (==) ( Robot n_1 nExp_1 e_1 p_1 ) ( Robot n_2 nExp_2 e_2 p_2 ) = n_1 == n_2 && nExp_1 == nExp_2 && e_1 == e_2 && ( length p_1 == length p_2 )
+    (/=) ( Robot n_1 nExp_1 e_1 p_1 ) ( Robot n_2 nExp_2 e_2 p_2 ) = n_1 /= n_2 && nExp_1 /= nExp_2 && e_1 /= e_2 && ( length p_1 /= length p_2 )
 
 recargaBateria :: Int -> Programa
 recargaBateria n robot = robot { energia = energia robot + n }
@@ -44,33 +46,7 @@ diferenciaDePoder :: Robot -> Robot -> Int
 diferenciaDePoder r1 r2 = abs (poder r1 - poder r2)
 
 --3
-atlas :: Robot
-atlas = Robot {
-    nombre = "Atlas",
-    nivelExperiencia = 100,
-    energia = 1000,
-    programas = []
-}
-
-titan :: Robot
-titan = Robot {
-    nombre = "Titan",
-    nivelExperiencia = 999999,
-    energia = 999999,
-    programas = []
-}
-
-robertito :: Robot
-robertito = Robot {
-    nombre = "Robertito",
-    nivelExperiencia = 9999999,
-    energia = 9999999,
-    programas = []
-}
-
 type Academia = [ Robot ]
-academia :: Academia
-academia = [ atlas, titan, robertito ]
 
 hayRobotSinProgramas :: String -> Academia -> Bool
 hayRobotSinProgramas nombreRobot = any(\robot -> nombre robot == nombreRobot && null(programas robot))
@@ -83,7 +59,11 @@ hayRobotsObstinados = all esObstinado . filter((>16).nivelExperiencia)
 
 -- 4. 
 f :: Ord a1 => (a2 -> a1) -> [a2] -> a2
-f x [y] = y
+-- Agregado y modificado para solucionar un warning ----------
+f _ [] = error "f: no se puede seleccionar el mayor de una lista vacía."
+-- f x [y] = y
+f _ [y] = y
+---------------------------------------------------------------
 f x (y1:y2:ys)
       | x y1 >= x y2 = f x (y1:ys)
       | otherwise = f x (y2 : ys)
@@ -97,10 +77,11 @@ f x (y1:y2:ys)
 
 -- 4a - Version mas expresiva:
 seleccionarMayor :: Ord a1 => (a2 -> a1) -> [a2] -> a2
-seleccionarMayor _ [ elem ] = elem
-seleccionarMayor criterio ( fst : snd : resto )
-         | criterio fst >= criterio snd = seleccionarMayor criterio ( fst : resto )
-         | otherwise = seleccionarMayor criterio ( snd : resto )
+seleccionarMayor _ [] = error "seleccionarMayor: no se puede seleccionar el mayor de una lista vacía."
+seleccionarMayor _ [ item ] = item
+seleccionarMayor criterio ( frsItem : sndItem : rest )
+         | criterio frsItem >= criterio sndItem = seleccionarMayor criterio ( frsItem : rest )
+         | otherwise = seleccionarMayor criterio ( sndItem : rest )
 
 -- 4b.1 - mejorProgramaContra:
 mejorProgramaContra :: Robot -> Robot -> Programa
@@ -113,4 +94,4 @@ mejorOponente robot = seleccionarMayor ( diferenciaDePoder robot )
 --5
 noPuedeDerrotarle :: Robot -> Robot -> Bool
 noPuedeDerrotarle atacante victima = energia victima == energia (foldl atacarAVictima victima (programas atacante))
-    where atacarAVictima victima programa = programa victima
+    where atacarAVictima vict prog = prog vict
