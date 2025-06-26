@@ -32,6 +32,40 @@ robertito = Robot {
 academia :: Academia
 academia = [ atlas, titan, robertito ]
 
+-- TESTS PUNTO 1
+
+-- Verifica que recargaBateria sume energía correctamente
+p1_testRecarga :: Test
+p1_testRecarga = TestCase $
+  assertEqual "recargaBateria suma energía" 150 (energia (recargaBateria 50 robotA))
+
+-- Verifica que descargaElectrica resta correctamente si hay energía > 10
+p1_testDescarga :: Test
+p1_testDescarga = TestCase $
+  assertEqual "descargaElectrica resta 10 si energía > 10" 90 (energia (descargaElectrica robotA))
+
+-- Verifica que autoAtaque en robot sin programas lo deja en ERROR
+p1_testAutoAtaque :: Test
+p1_testAutoAtaque = TestCase $
+  assertEqual "autoAtaque en robot sin programas lo deja en ERROR" "ERROR" (nombre (autoAtaque robotA))
+
+-- TESTS PUNTO 2
+
+-- Verifica poder de un robot
+p2_testPoder :: Test
+p2_testPoder = TestCase $
+  assertEqual "poder de robotB" (200 + (2 * 2)) (poder robotB)
+
+-- Verifica danio con descargaElectrica
+p2_testDanio :: Test
+p2_testDanio = TestCase $
+  assertEqual "danio por descargaElectrica" (-10) (danio robotA descargaElectrica)
+
+-- Verifica diferencia de poder
+p2_testDiferenciaPoder :: Test
+p2_testDiferenciaPoder = TestCase $
+  assertEqual "diferencia de poder entre robotA y robotB" (abs (poder robotA - poder robotB)) (diferenciaDePoder robotA robotB)
+
 -- Tests de punto 4:
 
 -- 4 - Verifica quien tiene mas energía
