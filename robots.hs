@@ -1,4 +1,3 @@
-module Robots where
 -- 1
 data Robot = Robot {   
         nombre :: String,
